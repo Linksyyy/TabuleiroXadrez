@@ -5,20 +5,22 @@ body {
     height: 100vh;
     background-color: #f0f0f0;
     margin: 0;
+    background-color: rgb(50, 50, 50);
 }
 
 .collum {
     display: flex;
     flex-direction: column;
 }
-
 .tabuleiro {
-    width: 150px;
-    height: 150px;
-    display: flex;
+    display: flex; 
     justify-content: center;
-    align-items: center;
-    font-size: 18px;
+    align-items: center; 
+    width: 80px;
+    height: 80px;
+    text-align: center;
+    font-size: 80px;
+    color: rgb(18, 18, 18);
     font-family: Arial, sans-serif;
     font-weight: bold;
 }
