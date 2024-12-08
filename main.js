@@ -1,5 +1,6 @@
 const HTMLboard = document.querySelector('.board')
 const button = document.querySelector('.button')
+
 function Chess() {
     //white piecies:
     const KW = '&#9812'
@@ -26,19 +27,25 @@ function Chess() {
         [PW, PW, PW, PW, PW, PW, PW, PW],//2
         [TW, NW, BW, QW, KW, BW, NW, TW]//1
     ]
-}
-Object.prototype.refresh = function (HTMLboard) {
-    for (let i = 1; i <= 15; i += 2) {
-        for (let j = 1; j <= 15; j += 2) {
-            if(this.board[(i - 1)/2][(j - 1)/2] == 0) break
-            HTMLboard.childNodes[j].childNodes[i].innerHTML = this.board[(i - 1)/2][(j - 1)/2]
+    this.refresh = function (HTMLboard) {
+        for (let i = 1; i <= 15; i += 2) {
+            for (let j = 1; j <= 15; j += 2) {
+                let actualSquare = HTMLboard.childNodes[j].childNodes[i]
+                let actualPiece = this.board[(i - 1)/2][(j - 1)/2]
+                if(actualPiece != 0) actualSquare.innerHTML = actualPiece
+            }
         }
-    }
+    }   
 }
 
 
 const Xadrez = new Chess()
-button.addEventListener('click', (event) => {
+document.addEventListener('DOMContentLoaded', (event) => {
     Xadrez.refresh(HTMLboard)
 })
-console.log(HTMLboard)
+
+button.addEventListener('click', (event) => {
+    Xadrez.refresh(HTMLboard)
+    console.log('clicked')
+})
+console.log(Xadrez.board)
