@@ -7,12 +7,14 @@ body {
     margin: 0;
     background-color: rgb(50, 50, 50);
 }
-
-.collum {
+.board {
+    display: flex;
+}
+.row {
     display: flex;
     flex-direction: column;
 }
-.tabuleiro {
+.square {
     display: flex; 
     justify-content: center;
     align-items: center; 
@@ -25,20 +27,20 @@ body {
     font-weight: bold;
 }
 
-.tabuleiro:nth-child(odd) {
+.square:nth-child(odd) {
     background-color: #f0d9b5;
 }
 
-.tabuleiro:nth-child(even) {
+.square:nth-child(even) {
     background-color: #b58863;
 }
 
-.collum:nth-child(odd) .tabuleiro:nth-child(even),
-.collum:nth-child(even) .tabuleiro:nth-child(odd) {
+.row:nth-child(odd) .square:nth-child(even),
+.row:nth-child(even) .square:nth-child(odd) {
     background-color: #b58863;
 }
 
-.collum:nth-child(odd) .tabuleiro:nth-child(odd),
-.collum:nth-child(even) .tabuleiro:nth-child(even) {
+.row:nth-child(odd) .square:nth-child(odd),
+.row:nth-child(even) .square:nth-child(even) {
     background-color: #f0d9b5;
 }

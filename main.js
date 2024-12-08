@@ -1,10 +1,44 @@
-[
-    [T, N, B, Q, K, B, N, T]//1
-    [P, P, P, P, P, P, P, P]//2
-    [0, 0, 0, 0, 0, 0, 0, 0]//3
-    [0, 0, 0, 0, 0, 0, 0, 0]//4
-    [0, 0, 0, 0, 0, 0, 0, 0]//5
-    [0, 0, 0, 0, 0, 0, 0, 0]//6
-    [P, P, P, P, P, P, P, P]//7
-    [T, N, B, Q, K, B, N, T]//8
-]
+const HTMLboard = document.querySelector('.board')
+const button = document.querySelector('.button')
+function Chess() {
+    //white piecies:
+    const KW = '&#9812'
+    const QW = '&#9813'
+    const TW = '&#9814'
+    const BW = '&#9815'
+    const NW = '&#9816'
+    const PW = '&#9817'
+    //black pieces:
+    const KB = '&#9818'
+    const QB = '&#9819'
+    const TB = '&#9820'
+    const BB = '&#9821'
+    const NB = '&#9822'
+    const PB = '&#9823'
+
+    this.board = [
+        [TB, NB, BB, QB, KB, BB, NB, TB],//8
+        [PB, PB, PB, PB, PB, PB, PB, PB],//7
+        [0, 0, 0, 0, 0, 0, 0, 0],//6
+        [0, 0, 0, 0, 0, 0, 0, 0],//5
+        [0, 0, 0, 0, 0, 0, 0, 0],//4
+        [0, 0, 0, 0, 0, 0, 0, 0],//3
+        [PW, PW, PW, PW, PW, PW, PW, PW],//2
+        [TW, NW, BW, QW, KW, BW, NW, TW]//1
+    ]
+}
+Object.prototype.refresh = function (HTMLboard) {
+    for (let i = 1; i <= 15; i += 2) {
+        for (let j = 1; j <= 15; j += 2) {
+            if(this.board[(i - 1)/2][(j - 1)/2] == 0) break
+            HTMLboard.childNodes[j].childNodes[i].innerHTML = this.board[(i - 1)/2][(j - 1)/2]
+        }
+    }
+}
+
+
+const Xadrez = new Chess()
+button.addEventListener('click', (event) => {
+    Xadrez.refresh(HTMLboard)
+})
+console.log(HTMLboard)
