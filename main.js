@@ -25,7 +25,15 @@ function Chess() {
         row: '',
         column: '',
         get isBlack() { return blackPieces.includes(this.piece) },
-        get have() {return this.piece != '';}
+        get have() { return this.piece != ''; }
+    }
+    this.secondSquareSelected = {
+        piece: '',
+        square: '',
+        row: '',
+        column: '',
+        get isBlack() { return blackPieces.includes(this.piece) },
+        get have() { return this.piece != ''; }
     }
 
     this.board = [
@@ -53,7 +61,11 @@ function Chess() {
         document.addEventListener('DOMContentLoaded', (event) => {
             Xadrez.refresh(HTMLboard)
         })
-        //first click
+        this.takeFirstClick()
+
+    }
+
+    this.takeFirstClick = function () {
         document.addEventListener('click', (e) => {
             if (typeof e.target.innerText == 'string') {
 
@@ -68,7 +80,7 @@ function Chess() {
             }
         })
     }
-    this.pawnMove = function () {
+    this.takeSecondClick = function () {
         //incomplete
         if (this.PieceSelected.have) {
             if (firstRow + 1 == 2) {
