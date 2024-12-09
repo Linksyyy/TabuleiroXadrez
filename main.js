@@ -16,17 +16,18 @@ function Chess() {
     const NB = '♞'
     const PB = '♟'
 
-    const whitePieces = ['♚', '♛', '♜', '♝', '♞', '♟']
+    const blackPieces = ['♚', '♛', '♜', '♝', '♞', '♟']
     const columns = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 
     this.PieceSelected = {
-        have: true,
-        piece: 0,
-        square: 0,
-        isWhite: 0,
-        row: 0,
-        column: 0
+        piece: '',
+        square: '',
+        row: '',
+        column: '',
+        get isBlack() { return blackPieces.includes(this.piece) },
+        get have() {return this.piece != '';}
     }
+
     this.board = [
         [TB, NB, BB, QB, KB, BB, NB, TB],//8
         [PB, PB, PB, PB, PB, PB, PB, PB],//7
@@ -48,23 +49,27 @@ function Chess() {
     }
 
     this.execute = function () {
+        //first refresh
+        document.addEventListener('DOMContentLoaded', (event) => {
+            Xadrez.refresh(HTMLboard)
+        })
         //first click
         document.addEventListener('click', (e) => {
             if (typeof e.target.innerText == 'string') {
 
                 this.PieceSelected.column = columns.indexOf(e.target.id[0])
                 this.PieceSelected.row = Number(e.target.id[1]) - 1
-
                 this.PieceSelected.square = e.target.id
                 this.PieceSelected.piece = e.target.innerText
 
-                console.log(this.PieceSelected.piece, this.PieceSelected.square)
+                console.log(this.PieceSelected)
 
                 //document.querySelector(`#${selectedSquare}`)
             }
         })
     }
-    this.movePawn = function () {
+    this.pawnMove = function () {
+        //incomplete
         if (this.PieceSelected.have) {
             if (firstRow + 1 == 2) {
                 console.log('oi')
@@ -86,7 +91,5 @@ function Chess() {
 
 
 const Xadrez = new Chess()
-document.addEventListener('DOMContentLoaded', (event) => {
-    Xadrez.refresh(HTMLboard)
-})
+
 Xadrez.execute()
