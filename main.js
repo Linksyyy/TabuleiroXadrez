@@ -1,6 +1,7 @@
-const HTMLboard = document.querySelector('.board')
 
 function Chess() {
+    const HTMLboard = document.querySelector('.board')
+
     //white piecies:
     const KW = '♔'
     const QW = '♕'
@@ -17,23 +18,24 @@ function Chess() {
     const PB = '♟'
 
     const blackPieces = ['♚', '♛', '♜', '♝', '♞', '♟']
+
+    const rows = [8, 7, 6, 5, 4, 3, 2, 1]
     const columns = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 
     this.PieceSelected = {
+        have: false,
         piece: '',
         square: '',
         row: '',
         column: '',
-        get isBlack() { return blackPieces.includes(this.piece) },
-        get have() { return this.piece != ''; }
+        get isBlack() { return blackPieces.includes(this.piece) }
     }
     this.secondSquareSelected = {
         piece: '',
         square: '',
         row: '',
         column: '',
-        get isBlack() { return blackPieces.includes(this.piece) },
-        get have() { return this.piece != ''; }
+        get isBlack() { return blackPieces.includes(this.piece) }
     }
 
     this.board = [
@@ -47,11 +49,11 @@ function Chess() {
         [TW, NW, BW, QW, KW, BW, NW, TW]//1
     ]
 
-    this.refresh = function (HTMLboard) {
+    this.refresh = function () {
         for (let i = 1; i <= 15; i += 2) {
             for (let j = 1; j <= 15; j += 2) {
-                if (this.board[(i - 1) / 2][(j - 1) / 2] == 0) break
                 HTMLboard.childNodes[j].childNodes[i].innerHTML = this.board[(i - 1) / 2][(j - 1) / 2]
+                if (this.board[(i - 1) / 2][(j - 1) / 2] == 0) HTMLboard.childNodes[j].childNodes[i].innerHTML = ' '
             }
         }
     }
@@ -59,44 +61,53 @@ function Chess() {
     this.execute = function () {
         //first refresh
         document.addEventListener('DOMContentLoaded', (event) => {
-            Xadrez.refresh(HTMLboard)
+            this.refresh()
         })
         this.takeFirstClick()
-
     }
 
     this.takeFirstClick = function () {
         document.addEventListener('click', (e) => {
+            if (this.PieceSelected.have) {
+                this.takeSecondClick()
+                return
+            }
             if (typeof e.target.innerText != 'string') return
 
             this.PieceSelected.column = columns.indexOf(e.target.id[0])
-            this.PieceSelected.row = Number(e.target.id[1]) - 1
+            this.PieceSelected.row = rows.indexOf(Number(e.target.id[1]))
             this.PieceSelected.square = e.target.id
             this.PieceSelected.piece = e.target.innerText
 
-            console.log(this.PieceSelected)
-
-            //document.querySelector(`#${selectedSquare}`)
+            if (this.PieceSelected.piece != 0) {
+                document.querySelector(`#${this.PieceSelected.square}`).style.backgroundColor = 'red';
+                this.PieceSelected.have = true
+            }
+            console.log('primeiro clique')
 
         })
+
     }
     this.takeSecondClick = function () {
-        //incomplete
         if (!this.PieceSelected.have) return
-        console.log('oi')
-        addEventListener('click', (e2) => {
-            let lastColumn = columns.indexOf(e2.target.id[0])
-            let lastRow = Number(e2.target.id[1]) - 1
+        addEventListener('click', (e) => {
+            this.secondSquareSelected.column = columns.indexOf(e.target.id[0])
+            this.secondSquareSelected.row = rows.indexOf(Number(e.target.id[1]))
+            this.secondSquareSelected.square = e.target.id
+            this.secondSquareSelected.piece = e.target.innerText
 
-            let lastSelectedSquare = e2.target.id
-            let lastSelectedPiece = e2.target.innerText
 
-            this.board[lastColumn][lastRow] = PW
+            this.board[this.secondSquareSelected.row][this.secondSquareSelected.column] = this.PieceSelected.piece
+            this.board[this.PieceSelected.row][this.PieceSelected.column] = '0'
+            document.querySelector(`#${this.PieceSelected.square}`).style.backgroundColor = '';
+            console.log('segundo clique')
+            
+            this.PieceSelected.have = false
+            this.refresh()
         })
     }
 }
 
-
-const Xadrez = new Chess()
-
+const HTMLboard = document.querySelector('.board')
+const Xadrez = new Chess(HTMLboard)
 Xadrez.execute()
