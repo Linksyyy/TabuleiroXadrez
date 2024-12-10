@@ -2,6 +2,7 @@
 function Chess() {
     const HTMLboard = document.querySelector('.board')
 
+    const selectedSquareColor = 'red'
     //white piecies:
     const KW = '♔'
     const QW = '♕'
@@ -22,10 +23,8 @@ function Chess() {
     const rows = [8, 7, 6, 5, 4, 3, 2, 1]
     const columns = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 
-    function changeSquareColor(square) {
-        if (square == 'red') document.querySelector(`#${square}`).style.backgroundColor = 'red'
-        document.querySelector(`#${square}`).style.backgroundColor = 'red'
-
+    function changeSquareColor(square, color) {
+        document.querySelector(`#${square}`).style.backgroundColor = color
     }
 
     this.PieceSelected = {
@@ -88,7 +87,7 @@ function Chess() {
             this.PieceSelected.piece = e.target.innerText
 
             if (this.PieceSelected.piece == 0) return
-            changeSquareColor(this.PieceSelected.square)
+            changeSquareColor(this.PieceSelected.square, selectedSquareColor)
             this.PieceSelected.have = true
 
         })
@@ -102,13 +101,13 @@ function Chess() {
             this.secondSquareSelected.row = rows.indexOf(Number(e.target.id[1]))
             this.secondSquareSelected.square = e.target.id
             this.secondSquareSelected.piece = e.target.innerText
-
+            
+            //incomplete
             this.board[this.secondSquareSelected.row][this.secondSquareSelected.column] = this.PieceSelected.piece
             this.board[this.PieceSelected.row][this.PieceSelected.column] = '0'
-
-            changeSquareColor(this.PieceSelected.square)
-
+            
             this.PieceSelected.have = false
+            changeSquareColor(this.PieceSelected.square, '')
             this.refresh()
         })
     }
