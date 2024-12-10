@@ -22,6 +22,12 @@ function Chess() {
     const rows = [8, 7, 6, 5, 4, 3, 2, 1]
     const columns = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 
+    function changeSquareColor(square) {
+        if (square == 'red') document.querySelector(`#${square}`).style.backgroundColor = 'red'
+        document.querySelector(`#${square}`).style.backgroundColor = 'red'
+
+    }
+
     this.PieceSelected = {
         have: false,
         piece: '',
@@ -59,12 +65,15 @@ function Chess() {
     }
 
     this.execute = function () {
-        //first refresh
+        this.firstRefresh()
+        this.takeFirstClick()
+        this.takeSecondClick()
+    }
+
+    this.firstRefresh = function () {
         document.addEventListener('DOMContentLoaded', (event) => {
             this.refresh()
         })
-        this.takeFirstClick()
-        this.takeSecondClick()
     }
 
     this.takeFirstClick = function () {
@@ -79,8 +88,9 @@ function Chess() {
             this.PieceSelected.piece = e.target.innerText
 
             if (this.PieceSelected.piece == 0) return
-            document.querySelector(`#${this.PieceSelected.square}`).style.backgroundColor = 'red';
+            changeSquareColor(this.PieceSelected.square)
             this.PieceSelected.have = true
+
         })
 
     }
@@ -96,7 +106,7 @@ function Chess() {
             this.board[this.secondSquareSelected.row][this.secondSquareSelected.column] = this.PieceSelected.piece
             this.board[this.PieceSelected.row][this.PieceSelected.column] = '0'
 
-            document.querySelector(`#${this.PieceSelected.square}`).style.backgroundColor = '';
+            changeSquareColor(this.PieceSelected.square)
 
             this.PieceSelected.have = false
             this.refresh()
@@ -104,6 +114,5 @@ function Chess() {
     }
 }
 
-const HTMLboard = document.querySelector('.board')
 const Xadrez = new Chess()
 Xadrez.execute()
