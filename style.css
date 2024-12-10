@@ -19,10 +19,10 @@ body {
     display: flex; 
     justify-content: center;
     align-items: center; 
-    width: 10dvh;
-    height: 10dvh;
+    width: 80px;
+    height: 80px;
     text-align: center;
-    font-size: 10dvh;
+    font-size: 80px;
     color: rgb(18, 18, 18);
     font-family: Arial, sans-serif;
     font-weight: bold;
