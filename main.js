@@ -114,7 +114,6 @@ function Chess(boardClass) {
             // this.board[this.PieceSelected.row][this.PieceSelected.column] = '0'
 
             changeSquareColor(this.PieceSelected.square, '')
-            this.pieceMoves()
             this.PieceSelected.have = false
         })
     }
@@ -122,6 +121,8 @@ function Chess(boardClass) {
     this.pieceMoves = function () {
         let possibleMoviments
         switch (this.PieceSelected.piece) {
+            // const blackPieces = ['♚', '♛', '♜', '♝', '♞', '♟']
+            // const whitePieces = ['♔', '♕', '♖', '♗', '♘', '♙']
             case '♔':
                 break;
             case '♕':
@@ -130,8 +131,8 @@ function Chess(boardClass) {
                 break;
             case '♗':
                 break;
-            case '♘':
-                possibleMoviments = [[2, 1], [2, -1], [1, 2], [-1, 2], [-2, 1], [-2, -1], [1, -2], [-1, -2]]  //linha / coluna
+            case '♘' || '♞':
+                possibleMoviments = [[2, 1], [2, -1], [1, 2], [-1, 2], [-2, 1], [-2, -1], [1, -2], [-1, -2]]  //row / column
                 break;
             case '♙':
                 possibleMoviments = [[1, 0], [2, 0]]  //linha / coluna
@@ -143,14 +144,10 @@ function Chess(boardClass) {
     }
 
     this.placeColorOnPossibleMoviments = function (possibleMoviments) {
-
-        let principalColumn = this.PieceSelected.column
-        let principalRow = this.PieceSelected.row
-
-        console.log(this.PieceSelected.column, this.PieceSelected.row)
-
         for (el of possibleMoviments) {
-            this.board[principalRow - el[0]][principalColumn - el[1]] = 1
+            let squareInNotation = columns[this.PieceSelected.column - el[1]] + rows[this.PieceSelected.row - el[0]]
+            console.log(squareInNotation)
+            HTMLboard.querySelector(`#${squareInNotation}`).style.backgroundColor = 'red'
         }
         this.refresh()
     }
