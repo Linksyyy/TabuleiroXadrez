@@ -47,7 +47,7 @@ function Chess(boardClass) {
         [TB, NB, BB, QB, KB, BB, NB, TB],//8
         [PB, PB, PB, PB, PB, PB, PB, PB],//7
         [0, 0, 0, 0, 0, 0, 0, 0],//6
-        [0, 0, 0, 0, NW, 0, 0, 0],//5
+        [0, 0, 0, 0, BB, 0, 0, 0],//5
         [0, 0, 0, 0, 0, 0, 0, 0],//4
         [0, 0, 0, 0, 0, 0, 0, 0],//3
         [PW, PW, PW, PW, PW, PW, PW, PW],//2
@@ -121,23 +121,47 @@ function Chess(boardClass) {
     this.pieceMoves = function () {
         let possibleMoviments
         switch (this.PieceSelected.piece) {
-            // const blackPieces = ['♚', '♛', '♜', '♝', '♞', '♟']
-            // const whitePieces = ['♔', '♕', '♖', '♗', '♘', '♙']
+            // const blacAkPieces = ['♚', '♛', '♜', '♝', '♞', '♟']
+            // const witePieces = ['♔', '♕', '♖', '♗', '♘', '♙']
             case '♔':
+            case '♚':
+                possibleMoviments = [[1, 0], [0, 1], [1, 1], [-1, 0], [0, -1], [-1, -1], [1, -1], [-1, 1]]
                 break;
             case '♕':
+            case '♛':
+                possibleMoviments = [[1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0], [7, 0],//tower moves
+                [-1, 0], [-2, 0], [-3, 0], [-4, 0], [-5, 0], [-6, 0], [-7, 0],
+                [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [0, 7],
+                [0, -1], [0, -2], [0, -3], [0, -4], [0, -5], [0, -6], [0, -7],
+            
+                [1, 1], [2, 2], [3, 3], [4, 4], [5, 5], [5, 5], [6, 6], [7, 7], //bishop moves
+                [-1, 1], [-2, 2], [-3, 3], [-4, 4], [-5, 5], [-5, 5], [-6, 6], -[-7, 7],
+                [1, -1], [2, -2], [3, -3], [4, -4], [5, -5], [5, -5], [6, -6], [7, -7],
+                [-1, -1], [-2, -2], [-3, -3], [-4, -4], [-5, -5], [-5, -5], [-6, -6], -[-7, -7]]
                 break;
             case '♖':
+            case '♜':
+                possibleMoviments = [[1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0], [7, 0],
+                [-1, 0], [-2, 0], [-3, 0], [-4, 0], [-5, 0], [-6, 0], [-7, 0],
+                [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [0, 7],
+                [0, -1], [0, -2], [0, -3], [0, -4], [0, -5], [0, -6], [0, -7]]
                 break;
             case '♗':
+            case '♝':
+                possibleMoviments = [[1, 1], [2, 2], [3, 3], [4, 4], [5, 5], [5, 5], [6, 6], [7, 7],
+                [-1, 1], [-2, 2], [-3, 3], [-4, 4], [-5, 5], [-5, 5], [-6, 6], -[-7, 7],
+                [1, -1], [2, -2], [3, -3], [4, -4], [5, -5], [5, -5], [6, -6], [7, -7],
+                [-1, -1], [-2, -2], [-3, -3], [-4, -4], [-5, -5], [-5, -5], [-6, -6], -[-7, -7]]
                 break;
-            case '♘' || '♞':
-                possibleMoviments = [[2, 1], [2, -1], [1, 2], [-1, 2], [-2, 1], [-2, -1], [1, -2], [-1, -2]]  //row / column
+            case '♘':
+            case '♞':
+                possibleMoviments = [[2, 1], [2, -1], [1, 2], [-1, 2], [-2, 1], [22, 2], [-2, -1], [1, -2], [-1, -2], [27, 2]]  //row / column 
                 break;
             case '♙':
-                possibleMoviments = [[1, 0], [2, 0]]  //linha / coluna
+                possibleMoviments = [[1, 0], [2, 0]]  
                 break;
-            default:
+            case '♟':
+                possibleMoviments = [[-1, 0], [-2, 0]]
                 break;
         }
         this.placeColorOnPossibleMoviments(possibleMoviments)
@@ -145,9 +169,11 @@ function Chess(boardClass) {
 
     this.placeColorOnPossibleMoviments = function (possibleMoviments) {
         for (el of possibleMoviments) {
-            let squareInNotation = columns[this.PieceSelected.column - el[1]] + rows[this.PieceSelected.row - el[0]]
-            console.log(squareInNotation)
-            HTMLboard.querySelector(`#${squareInNotation}`).style.backgroundColor = 'red'
+            try {
+                let squareInNotation = columns[this.PieceSelected.column - el[1]] + rows[this.PieceSelected.row - el[0]]
+                console.log(squareInNotation)
+                HTMLboard.querySelector(`#${squareInNotation}`).style.backgroundColor = 'red'
+            } catch (e) { } //criticar trycatch vazio = gay 
         }
         this.refresh()
     }
