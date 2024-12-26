@@ -112,14 +112,33 @@ function Chess(boardClass) {
             //pseude-moviment
             // this.board[this.secondSquareSelected.row][this.secondSquareSelected.column] = this.PieceSelected.piece
             // this.board[this.PieceSelected.row][this.PieceSelected.column] = '0'
-
-            changeSquareColor(this.PieceSelected.square, '')
+            try {
+                changeSquareColor(this.PieceSelected.square, '')
+                this.clearRedSquares()
+            } catch (e) { this.PieceSelected.have = false }
             this.PieceSelected.have = false
         })
     }
 
+    this.clearRedSquares = function () {
+
+        for (let i = 0; i < 8; i++) {
+            for (let j = 0; j < 8; j++) {
+                try {
+                    this.placeColorOnPossibleMoviments([[i, j]], '')
+                    this.placeColorOnPossibleMoviments([[i, j * -1]], '')
+                    this.placeColorOnPossibleMoviments([[i * -1, j]], '')
+                    this.placeColorOnPossibleMoviments([[i * -1, j * -1]], '')
+                }
+                catch (e) { }
+            }
+        }
+    }
+
     this.pieceMoves = function () {
-        let possibleMoviments
+        let possibleMoviments = [
+
+        ]
         switch (this.PieceSelected.piece) {
             // const blacAkPieces = ['♚', '♛', '♜', '♝', '♞', '♟']
             // const witePieces = ['♔', '♕', '♖', '♗', '♘', '♙']
@@ -133,7 +152,7 @@ function Chess(boardClass) {
                 [-1, 0], [-2, 0], [-3, 0], [-4, 0], [-5, 0], [-6, 0], [-7, 0],
                 [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [0, 7],
                 [0, -1], [0, -2], [0, -3], [0, -4], [0, -5], [0, -6], [0, -7],
-            
+
                 [1, 1], [2, 2], [3, 3], [4, 4], [5, 5], [5, 5], [6, 6], [7, 7], //bishop moves
                 [-1, 1], [-2, 2], [-3, 3], [-4, 4], [-5, 5], [-5, 5], [-6, 6], -[-7, 7],
                 [1, -1], [2, -2], [3, -3], [4, -4], [5, -5], [5, -5], [6, -6], [7, -7],
@@ -158,7 +177,7 @@ function Chess(boardClass) {
                 possibleMoviments = [[2, 1], [2, -1], [1, 2], [-1, 2], [-2, 1], [22, 2], [-2, -1], [1, -2], [-1, -2], [27, 2]]  //row / column 
                 break;
             case '♙':
-                possibleMoviments = [[1, 0], [2, 0]]  
+                possibleMoviments = [[1, 0], [2, 0]]
                 break;
             case '♟':
                 possibleMoviments = [[-1, 0], [-2, 0]]
@@ -167,12 +186,12 @@ function Chess(boardClass) {
         this.placeColorOnPossibleMoviments(possibleMoviments)
     }
 
-    this.placeColorOnPossibleMoviments = function (possibleMoviments) {
+    this.placeColorOnPossibleMoviments = function (possibleMoviments, color = 'red') {
         for (el of possibleMoviments) {
             try {
                 let squareInNotation = columns[this.PieceSelected.column - el[1]] + rows[this.PieceSelected.row - el[0]]
                 console.log(squareInNotation)
-                HTMLboard.querySelector(`#${squareInNotation}`).style.backgroundColor = 'red'
+                HTMLboard.querySelector(`#${squareInNotation}`).style.backgroundColor = color
             } catch (e) { } //criticar trycatch vazio = gay 
         }
         this.refresh()
