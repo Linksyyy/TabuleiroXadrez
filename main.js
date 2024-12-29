@@ -27,15 +27,16 @@ function Chess(boardClass) {
         document.querySelector(`#${square}`).style.backgroundColor = color
     }
 
-    this.PieceSelected = {
+    let PieceSelected = {
         have: false,
         piece: '',
         square: '',
         row: '',
         column: '',
+        possibleMoviments: '',
         get isBlack() { return blackPieces.includes(this.piece) }
     }
-    this.secondSquareSelected = {
+    let secondSquareSelected = {
         piece: '',
         square: '',
         row: '',
@@ -43,7 +44,7 @@ function Chess(boardClass) {
         get isBlack() { return blackPieces.includes(this.piece) }
     }
 
-    this.board = [
+    let board = [
         [TB, NB, BB, QB, KB, BB, NB, TB],//8
         [PB, PB, PB, PB, PB, PB, PB, PB],//7
         [0, 0, 0, 0, 0, 0, 0, 0],//6
@@ -54,92 +55,84 @@ function Chess(boardClass) {
         [TW, NW, BW, QW, KW, BW, NW, TW]//1
     ]
 
-    this.refresh = function () {
+    function refresh() {
+        console.log('refresh')
         for (let i = 1; i <= 15; i += 2) {
             for (let j = 1; j <= 15; j += 2) {
-                HTMLboard.childNodes[j].childNodes[i].innerHTML = this.board[(i - 1) / 2][(j - 1) / 2]
-                if (this.board[(i - 1) / 2][(j - 1) / 2] == 0 || this.board[(i - 1) / 2][(j - 1) / 2] == 1) HTMLboard.childNodes[j].childNodes[i].innerHTML = ''
-                if (this.board[(i - 1) / 2][(j - 1) / 2] == 1) changeSquareColor(HTMLboard.childNodes[j].childNodes[i].id)
+                HTMLboard.childNodes[j].childNodes[i].innerHTML = board[(i - 1) / 2][(j - 1) / 2]
+                if (board[(i - 1) / 2][(j - 1) / 2] == 0 || board[(i - 1) / 2][(j - 1) / 2] == 1) HTMLboard.childNodes[j].childNodes[i].innerHTML = ''
+                if (board[(i - 1) / 2][(j - 1) / 2] == 1) changeSquareColor(HTMLboard.childNodes[j].childNodes[i].id)
             }
         }
     }
 
     this.execute = function () {
-        this.firstRefresh()
-        this.takeFirstClick()
-        this.takeSecondClick()
+        console.log('execute')
+        firstRefresh()
+        takeFirstClick()
+        takeSecondClick()
     }
 
-    this.firstRefresh = function () {
+    function firstRefresh() {
+        console.log('firstRefresh')
         document.addEventListener('DOMContentLoaded', (event) => {
-            this.refresh()
+            refresh()
         })
     }
 
-    this.takeFirstClick = function () {
+    takeFirstClick = function () {
         document.addEventListener('click', (e) => {
-            if (this.PieceSelected.have) return
+            if (PieceSelected.have) return
             if (typeof e.target.innerText != 'string') return
-            console.log(1)
+            console.log('takeFirstClick')
             try {
-                this.PieceSelected.column = columns.indexOf(e.target.id[0])
-                this.PieceSelected.row = rows.indexOf(Number(e.target.id[1]))
-                this.PieceSelected.square = e.target.id
-                this.PieceSelected.piece = e.target.innerText
+                PieceSelected.column = columns.indexOf(e.target.id[0])
+                PieceSelected.row = rows.indexOf(Number(e.target.id[1]))
+                PieceSelected.square = e.target.id
+                PieceSelected.piece = e.target.innerText
 
-                if (this.PieceSelected.piece == 0) return
-                this.PieceSelected.have = true
-                changeSquareColor(this.PieceSelected.square)
-                this.pieceMoves()
-                this.refresh()
+                if (PieceSelected.piece == 0) return
+                PieceSelected.have = true
+                changeSquareColor(PieceSelected.square)
+                pieceMoves()
+                    .refresh()
             } catch (e) { }
 
         })
 
     }
-    this.takeSecondClick = function () {
+    takeSecondClick = function () {
         addEventListener('click', (e) => {
-            if (e.target.id == this.PieceSelected.square) return
-            console.log(2)
+            if (e.target.id == PieceSelected.square) return
+            console.log('takeSecondClick')
             try {
-                this.secondSquareSelected.column = columns.indexOf(e.target.id[0])
-                this.secondSquareSelected.row = rows.indexOf(Number(e.target.id[1]))
-                this.secondSquareSelected.square = e.target.id
-                this.secondSquareSelected.piece = e.target.innerText
+                secondSquareSelected.column = columns.indexOf(e.target.id[0])
+                secondSquareSelected.row = rows.indexOf(Number(e.target.id[1]))
+                secondSquareSelected.square = e.target.id
+                secondSquareSelected.piece = e.target.innerText
 
-            } catch (e) { this.PieceSelected.have = false }
+            } catch (e) { PieceSelected.have = false }
 
             //pseude-moviment
             // this.board[this.secondSquareSelected.row][this.secondSquareSelected.column] = this.PieceSelected.piece
             // this.board[this.PieceSelected.row][this.PieceSelected.column] = '0'
             try {
-                changeSquareColor(this.PieceSelected.square, '')
-                this.clearRedSquares()
-            } catch (e) { this.PieceSelected.have = false }
-            this.PieceSelected.have = false
+                clearRedSquares()
+            } catch (e) { PieceSelected.have = false }
+            PieceSelected.have = false
         })
     }
 
-    this.clearRedSquares = function () {
-
-        for (let i = 0; i < 8; i++) {
-            for (let j = 0; j < 8; j++) {
-                try {
-                    this.placeColorOnPossibleMoviments([[i, j]], '')
-                    this.placeColorOnPossibleMoviments([[i, j * -1]], '')
-                    this.placeColorOnPossibleMoviments([[i * -1, j]], '')
-                    this.placeColorOnPossibleMoviments([[i * -1, j * -1]], '')
-                }
-                catch (e) { }
-            }
-        }
+    clearRedSquares = function () {
+        console.log('clearRedSquares')
+        placeColorOnPossibleMoviments(PieceSelected.possibleMoviments, '')
+        //Ta uma grande merda, mas estou com preguiça, ajeito depois
     }
 
-    this.pieceMoves = function () {
-        let possibleMoviments = [
+    pieceMoves = function () { // tenho que dividir essa função em duas futuramente
 
-        ]
-        switch (this.PieceSelected.piece) {
+        let possibleMoviments = []
+        switch (PieceSelected.piece) {
             // const blacAkPieces = ['♚', '♛', '♜', '♝', '♞', '♟']
             // const witePieces = ['♔', '♕', '♖', '♗', '♘', '♙']
             case '♔':
@@ -183,18 +176,19 @@ function Chess(boardClass) {
                 possibleMoviments = [[-1, 0], [-2, 0]]
                 break;
         }
-        this.placeColorOnPossibleMoviments(possibleMoviments)
+        PieceSelected.possibleMoviments = [possibleMoviments]
+        placeColorOnPossibleMoviments(possibleMoviments)
     }
 
-    this.placeColorOnPossibleMoviments = function (possibleMoviments, color = 'red') {
+    function placeColorOnPossibleMoviments(possibleMoviments, color = 'red') {
+        console.log('placeColorOnPossibleMoviments')
         for (el of possibleMoviments) {
             try {
-                let squareInNotation = columns[this.PieceSelected.column - el[1]] + rows[this.PieceSelected.row - el[0]]
-                console.log(squareInNotation)
+                let squareInNotation = columns[PieceSelected.column - el[1]] + rows[PieceSelected.row - el[0]]
                 HTMLboard.querySelector(`#${squareInNotation}`).style.backgroundColor = color
             } catch (e) { } //criticar trycatch vazio = gay 
         }
-        this.refresh()
+        refresh()
     }
 }
 
