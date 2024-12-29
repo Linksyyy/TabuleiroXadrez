@@ -1,3 +1,5 @@
+// // blackPieces = ['♚', '♛', '♜', '♝', '♞', '♟']
+// whitePieces = ['♔', '♕', '♖', '♗', '♘', '♙']
 
 function Chess(boardClass) {
 
@@ -25,8 +27,6 @@ function Chess(boardClass) {
     const NB = '♞'
     const PB = '♟'
 
-    const blackPieces = ['♚', '♛', '♜', '♝', '♞', '♟']
-    const whitePieces = ['♔', '♕', '♖', '♗', '♘', '♙']
     const rows = [8, 7, 6, 5, 4, 3, 2, 1]
     const columns = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 
@@ -36,15 +36,13 @@ function Chess(boardClass) {
         square: '',
         row: '',
         column: '',
-        possibleMoviments: '',
-        get isBlack() { return blackPieces.includes(piece) }
+        possibleMoviments: ''
     }
     let secondSquareSelected = {
         piece: '',
         square: '',
         row: '',
-        column: '',
-        get isBlack() { return blackPieces.includes(piece) }
+        column: ''
     }
 
     let board = [
@@ -83,7 +81,7 @@ function Chess(boardClass) {
         })
     }
 
-    takeFirstClick = function () {
+    function takeFirstClick() {
         document.addEventListener('click', (e) => {
             if (PieceSelected.have) return
             if (typeof e.target.innerText != 'string') return
@@ -104,7 +102,7 @@ function Chess(boardClass) {
         })
 
     }
-    takeSecondClick = function () {
+    function takeSecondClick() {
         colorOnPossibleMoviments([[0, 2]], 'black')
         addEventListener('click', (e) => {
             if (e.target.id == PieceSelected.square) return
@@ -114,12 +112,10 @@ function Chess(boardClass) {
                 secondSquareSelected.row = rows.indexOf(Number(e.target.id[1]))
                 secondSquareSelected.square = e.target.id
                 secondSquareSelected.piece = e.target.innerText
+                if(isRed(secondSquareSelected.column, secondSquareSelected.row)) movePiece()
 
             } catch (e) { PieceSelected.have = false }
 
-            //pseude-moviment
-            // board[secondSquareSelected.row][secondSquareSelected.column] = PieceSelected.piece
-            // board[PieceSelected.row][PieceSelected.column] = '0'
             changeSquareColor(PieceSelected.square, '')
             clearRedSquares()
 
@@ -127,14 +123,20 @@ function Chess(boardClass) {
         })
     }
 
-    clearRedSquares = function () {
+    function movePiece() {
+        console.log('movePiece()')
+        board[secondSquareSelected.row][secondSquareSelected.column] = PieceSelected.piece
+        board[PieceSelected.row][PieceSelected.column] = '0'
+    }
+
+    function clearRedSquares() {
         console.log('clearRedSquares()')
         try {
             colorOnPossibleMoviments(PieceSelected.possibleMoviments, '')
         } catch (e) { }
     }
 
-    pieceMoves = function () { // tenho que dividir essa função em duas futuramente
+    function pieceMoves() { // tenho que dividir essa função em duas futuramente
         let possibleMoviments = []
         switch (PieceSelected.piece) {
             case '♔':
@@ -192,7 +194,13 @@ function Chess(boardClass) {
         }
         refresh()
     }
+
+    function isRed(column, row) {
+        let notation = columns[column] + rows[row]
+        console.log(`isRed(${column}, ${row})`, notation)
+        return HTMLboard.querySelector(`#${notation}`).style.backgroundColor == selectedSquareColor
+    }
 }
 
 const Xadrez = new Chess('.board')
-Xadrez.execute()
+Xadrez.execute()                
