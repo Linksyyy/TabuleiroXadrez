@@ -1,3 +1,8 @@
+:root {
+    --primaryColor: #e6abf0;
+    --secundaryColor: #964696;
+}
+
 body {
     display: flex;
     justify-content: center;
@@ -29,19 +34,21 @@ body {
 }
 
 .square:nth-child(odd) {
-    background-color: #f0d9b5;
+    background-color: var(--primaryColor)
 }
 
 .square:nth-child(even) {
-    background-color: #b58863;
+    background-color: var(--secundaryColor);
 }
 
 .row:nth-child(odd) .square:nth-child(even),
 .row:nth-child(even) .square:nth-child(odd) {
-    background-color: #b58863;
+    background-color: var(--secundaryColor)
 }
 
 .row:nth-child(odd) .square:nth-child(odd),
 .row:nth-child(even) .square:nth-child(even) {
-    background-color: #f0d9b5;
+    background-color: var(--primaryColor);
 }
+/* #f0d9b5; */
+/* #b58863; */
