@@ -1,7 +1,14 @@
 
 function Chess(boardClass) {
-    const HTMLboard = document.querySelector(boardClass)
 
+    this.execute = function () {
+        console.log('execute')
+        firstRefresh()
+        takeFirstClick()
+        takeSecondClick()
+    }
+
+    const HTMLboard = document.querySelector(boardClass)
     const selectedSquareColor = 'red'
     //white piecies:
     const KW = '♔'
@@ -24,7 +31,9 @@ function Chess(boardClass) {
     const columns = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 
     function changeSquareColor(square, color = selectedSquareColor) {
-        document.querySelector(`#${square}`).style.backgroundColor = color
+        try {
+            document.querySelector(`#${square}`).style.backgroundColor = color
+        } catch (e) { }
     }
 
     let PieceSelected = {
@@ -34,14 +43,14 @@ function Chess(boardClass) {
         row: '',
         column: '',
         possibleMoviments: '',
-        get isBlack() { return blackPieces.includes(this.piece) }
+        get isBlack() { return blackPieces.includes(piece) }
     }
     let secondSquareSelected = {
         piece: '',
         square: '',
         row: '',
         column: '',
-        get isBlack() { return blackPieces.includes(this.piece) }
+        get isBlack() { return blackPieces.includes(piece) }
     }
 
     let board = [
@@ -64,13 +73,6 @@ function Chess(boardClass) {
                 if (board[(i - 1) / 2][(j - 1) / 2] == 1) changeSquareColor(HTMLboard.childNodes[j].childNodes[i].id)
             }
         }
-    }
-
-    this.execute = function () {
-        console.log('execute')
-        firstRefresh()
-        takeFirstClick()
-        takeSecondClick()
     }
 
     function firstRefresh() {
@@ -102,6 +104,7 @@ function Chess(boardClass) {
 
     }
     takeSecondClick = function () {
+        colorOnPossibleMoviments([[0, 2]], 'black')
         addEventListener('click', (e) => {
             if (e.target.id == PieceSelected.square) return
             console.log('takeSecondClick')
@@ -114,27 +117,26 @@ function Chess(boardClass) {
             } catch (e) { PieceSelected.have = false }
 
             //pseude-moviment
-            // this.board[this.secondSquareSelected.row][this.secondSquareSelected.column] = this.PieceSelected.piece
-            // this.board[this.PieceSelected.row][this.PieceSelected.column] = '0'
-            try {
-                clearRedSquares()
-            } catch (e) { PieceSelected.have = false }
+            // board[secondSquareSelected.row][secondSquareSelected.column] = PieceSelected.piece
+            // board[PieceSelected.row][PieceSelected.column] = '0'
+            changeSquareColor(PieceSelected.square, '')
+            clearRedSquares()
+
             PieceSelected.have = false
         })
     }
 
     clearRedSquares = function () {
-        console.log('clearRedSquares')
-        placeColorOnPossibleMoviments(PieceSelected.possibleMoviments, '')
+        console.log('clearRedSquares', PieceSelected.possibleMoviments)
+        try {
+            colorOnPossibleMoviments(PieceSelected.possibleMoviments, '')
+        } catch (e) { }
         //Ta uma grande merda, mas estou com preguiça, ajeito depois
     }
 
     pieceMoves = function () { // tenho que dividir essa função em duas futuramente
-
         let possibleMoviments = []
         switch (PieceSelected.piece) {
-            // const blacAkPieces = ['♚', '♛', '♜', '♝', '♞', '♟']
-            // const witePieces = ['♔', '♕', '♖', '♗', '♘', '♙']
             case '♔':
             case '♚':
                 possibleMoviments = [[1, 0], [0, 1], [1, 1], [-1, 0], [0, -1], [-1, -1], [1, -1], [-1, 1]]
@@ -176,17 +178,19 @@ function Chess(boardClass) {
                 possibleMoviments = [[-1, 0], [-2, 0]]
                 break;
         }
-        PieceSelected.possibleMoviments = [possibleMoviments]
-        placeColorOnPossibleMoviments(possibleMoviments)
+        PieceSelected.possibleMoviments = possibleMoviments
+        colorOnPossibleMoviments(possibleMoviments)
     }
 
-    function placeColorOnPossibleMoviments(possibleMoviments, color = 'red') {
-        console.log('placeColorOnPossibleMoviments')
+    function colorOnPossibleMoviments(possibleMoviments, color = selectedSquareColor) {
+        console.log('colorOnPossibleMoviments')
         for (el of possibleMoviments) {
             try {
                 let squareInNotation = columns[PieceSelected.column - el[1]] + rows[PieceSelected.row - el[0]]
+                console.log( HTMLboard.querySelector(`#${squareInNotation}`))
+                console.log(columns[PieceSelected.column - el[1]] + rows[PieceSelected.row - el[0]])
                 HTMLboard.querySelector(`#${squareInNotation}`).style.backgroundColor = color
-            } catch (e) { } //criticar trycatch vazio = gay 
+            } catch (e) {console.log('erro em colorOnP...') } //criticar trycatch vazio = gay 
         }
         refresh()
     }
