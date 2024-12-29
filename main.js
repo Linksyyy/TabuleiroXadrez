@@ -49,7 +49,7 @@ function Chess(boardClass) {
         [TB, NB, BB, QB, KB, BB, NB, TB],//8
         [PB, PB, PB, PB, PB, PB, PB, PB],//7
         [0, 0, 0, 0, 0, 0, 0, 0],//6
-        [0, 0, 0, 0, BB, 0, 0, 0],//5
+        [0, 0, 0, 0, 0, 0, 0, 0],//5
         [0, 0, 0, 0, 0, 0, 0, 0],//4
         [0, 0, 0, 0, 0, 0, 0, 0],//3
         [PW, PW, PW, PW, PW, PW, PW, PW],//2
