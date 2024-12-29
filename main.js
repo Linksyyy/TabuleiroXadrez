@@ -2,7 +2,7 @@
 function Chess(boardClass) {
 
     this.execute = function () {
-        console.log('execute')
+        console.log('execute()')
         firstRefresh()
         takeFirstClick()
         takeSecondClick()
@@ -29,12 +29,6 @@ function Chess(boardClass) {
     const whitePieces = ['♔', '♕', '♖', '♗', '♘', '♙']
     const rows = [8, 7, 6, 5, 4, 3, 2, 1]
     const columns = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
-
-    function changeSquareColor(square, color = selectedSquareColor) {
-        try {
-            document.querySelector(`#${square}`).style.backgroundColor = color
-        } catch (e) { }
-    }
 
     let PieceSelected = {
         have: false,
@@ -65,7 +59,7 @@ function Chess(boardClass) {
     ]
 
     function refresh() {
-        console.log('refresh')
+        console.log('refresh()')
         for (let i = 1; i <= 15; i += 2) {
             for (let j = 1; j <= 15; j += 2) {
                 HTMLboard.childNodes[j].childNodes[i].innerHTML = board[(i - 1) / 2][(j - 1) / 2]
@@ -75,8 +69,15 @@ function Chess(boardClass) {
         }
     }
 
+    function changeSquareColor(square, color = selectedSquareColor) {
+        try {
+            document.querySelector(`#${square}`).style.backgroundColor = color
+            console.log(`changeSquareColor(${square}, ${color})`)
+        } catch (e) { }
+    }
+
     function firstRefresh() {
-        console.log('firstRefresh')
+        console.log('firstRefresh()')
         document.addEventListener('DOMContentLoaded', (event) => {
             refresh()
         })
@@ -86,7 +87,7 @@ function Chess(boardClass) {
         document.addEventListener('click', (e) => {
             if (PieceSelected.have) return
             if (typeof e.target.innerText != 'string') return
-            console.log('takeFirstClick')
+            console.log('takeFirstClick()')
             try {
                 PieceSelected.column = columns.indexOf(e.target.id[0])
                 PieceSelected.row = rows.indexOf(Number(e.target.id[1]))
@@ -107,7 +108,7 @@ function Chess(boardClass) {
         colorOnPossibleMoviments([[0, 2]], 'black')
         addEventListener('click', (e) => {
             if (e.target.id == PieceSelected.square) return
-            console.log('takeSecondClick')
+            console.log('takeSecondClick()')
             try {
                 secondSquareSelected.column = columns.indexOf(e.target.id[0])
                 secondSquareSelected.row = rows.indexOf(Number(e.target.id[1]))
@@ -127,11 +128,10 @@ function Chess(boardClass) {
     }
 
     clearRedSquares = function () {
-        console.log('clearRedSquares', PieceSelected.possibleMoviments)
+        console.log('clearRedSquares()')
         try {
             colorOnPossibleMoviments(PieceSelected.possibleMoviments, '')
         } catch (e) { }
-        //Ta uma grande merda, mas estou com preguiça, ajeito depois
     }
 
     pieceMoves = function () { // tenho que dividir essa função em duas futuramente
@@ -183,14 +183,12 @@ function Chess(boardClass) {
     }
 
     function colorOnPossibleMoviments(possibleMoviments, color = selectedSquareColor) {
-        console.log('colorOnPossibleMoviments')
+        console.log('colorOnPossibleMoviments()')
         for (el of possibleMoviments) {
             try {
                 let squareInNotation = columns[PieceSelected.column - el[1]] + rows[PieceSelected.row - el[0]]
-                console.log( HTMLboard.querySelector(`#${squareInNotation}`))
-                console.log(columns[PieceSelected.column - el[1]] + rows[PieceSelected.row - el[0]])
-                HTMLboard.querySelector(`#${squareInNotation}`).style.backgroundColor = color
-            } catch (e) {console.log('erro em colorOnP...') } //criticar trycatch vazio = gay 
+                changeSquareColor(squareInNotation, color)
+            } catch (e) { }
         }
         refresh()
     }
