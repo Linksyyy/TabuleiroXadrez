@@ -1,5 +1,4 @@
-// // blackPieces = ['♚', '♛', '♜', '♝', '♞', '♟']
-// whitePieces = ['♔', '♕', '♖', '♗', '♘', '♙']
+
 
 function Chess(boardClass) {
 
@@ -26,7 +25,8 @@ function Chess(boardClass) {
     const BB = '♝'
     const NB = '♞'
     const PB = '♟'
-
+    const blackPieces = ['♚', '♛', '♜', '♝', '♞', '♟']
+    const whitePieces = ['♔', '♕', '♖', '♗', '♘', '♙']
     const rows = [8, 7, 6, 5, 4, 3, 2, 1]
     const columns = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 
@@ -45,24 +45,24 @@ function Chess(boardClass) {
         column: ''
     }
 
-    let board = [
-        [TB, NB, BB, QB, KB, BB, NB, TB],//8
-        [PB, PB, PB, PB, PB, PB, PB, PB],//7
-        [0, 0, 0, 0, 0, 0, 0, 0],//6
-        [0, 0, 0, 0, 0, 0, 0, 0],//5
-        [0, 0, 0, 0, 0, 0, 0, 0],//4
-        [0, 0, 0, 0, 0, 0, 0, 0],//3
-        [PW, PW, PW, PW, PW, PW, PW, PW],//2
-        [TW, NW, BW, QW, KW, BW, NW, TW]//1
+    board = [
+        [TB, 0, BB, QB, KB, BB, NB, 0],//8
+        [0, TB, PB, PB, PB, PB, PB, 0],//7
+        [0, 0, 0, PW, 0, 0, 0, 0],//6
+        [0, 0, PW, PB, TW, PW, PW, 0],//5
+        [0, 0, 0, 0, PW, PW, 0, 0],//4
+        [TW, TW, TW, TB, TB, TW, TW, 0],//3
+        [PW, PW, PW, PW, PW, PW, PW, 0],//2
+        [TB, NB, BB, QB, KW, BB, NB, TW]//1
     ]
+
 
     function refresh() {
         console.log('refresh()')
         for (let i = 1; i <= 15; i += 2) {
             for (let j = 1; j <= 15; j += 2) {
                 HTMLboard.childNodes[j].childNodes[i].innerHTML = board[(i - 1) / 2][(j - 1) / 2]
-                if (board[(i - 1) / 2][(j - 1) / 2] == 0 || board[(i - 1) / 2][(j - 1) / 2] == 1) HTMLboard.childNodes[j].childNodes[i].innerHTML = ''
-                if (board[(i - 1) / 2][(j - 1) / 2] == 1) changeSquareColor(HTMLboard.childNodes[j].childNodes[i].id)
+                if (board[(i - 1) / 2][(j - 1) / 2] == 0) HTMLboard.childNodes[j].childNodes[i].innerHTML = ''
             }
         }
     }
@@ -91,12 +91,13 @@ function Chess(boardClass) {
                 PieceSelected.row = rows.indexOf(Number(e.target.id[1]))
                 PieceSelected.square = e.target.id
                 PieceSelected.piece = e.target.innerText
+                console.log(columns[PieceSelected.column] + rows[PieceSelected.row])
 
                 if (PieceSelected.piece == 0) return
                 PieceSelected.have = true
                 changeSquareColor(PieceSelected.square)
                 pieceMoves()
-                    .refresh()
+                refresh()
             } catch (e) { }
 
         })
@@ -112,13 +113,12 @@ function Chess(boardClass) {
                 secondSquareSelected.row = rows.indexOf(Number(e.target.id[1]))
                 secondSquareSelected.square = e.target.id
                 secondSquareSelected.piece = e.target.innerText
-                if(isRed(secondSquareSelected.column, secondSquareSelected.row)) movePiece()
+                if (isRed(secondSquareSelected.column, secondSquareSelected.row)) movePiece()
 
             } catch (e) { PieceSelected.have = false }
 
             changeSquareColor(PieceSelected.square, '')
             clearRedSquares()
-
             PieceSelected.have = false
         })
     }
@@ -138,13 +138,14 @@ function Chess(boardClass) {
 
     function pieceMoves() { // tenho que dividir essa função em duas futuramente
         let possibleMoviments = []
+        console.log(PieceSelected.piece == TW)
         switch (PieceSelected.piece) {
-            case '♔':
-            case '♚':
+            case KB:
+            case KW:
                 possibleMoviments = [[1, 0], [0, 1], [1, 1], [-1, 0], [0, -1], [-1, -1], [1, -1], [-1, 1]]
                 break;
-            case '♕':
-            case '♛':
+            case QB:
+            case QW:
                 possibleMoviments = [[1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0], [7, 0],//tower moves
                 [-1, 0], [-2, 0], [-3, 0], [-4, 0], [-5, 0], [-6, 0], [-7, 0],
                 [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [0, 7],
@@ -155,41 +156,34 @@ function Chess(boardClass) {
                 [1, -1], [2, -2], [3, -3], [4, -4], [5, -5], [5, -5], [6, -6], [7, -7],
                 [-1, -1], [-2, -2], [-3, -3], [-4, -4], [-5, -5], [-5, -5], [-6, -6], -[-7, -7]]
                 break;
-            case '♖':
-            case '♜':
-                possibleMoviments = [[1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0], [7, 0],
-                [-1, 0], [-2, 0], [-3, 0], [-4, 0], [-5, 0], [-6, 0], [-7, 0],
-                [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [0, 7],
-                [0, -1], [0, -2], [0, -3], [0, -4], [0, -5], [0, -6], [0, -7]]
+            case TB:
+            case TW:
+                possibleMoviments = createPossibleMoves(TW)
                 break;
-            case '♗':
-            case '♝':
-                possibleMoviments = [[1, 1], [2, 2], [3, 3], [4, 4], [5, 5], [5, 5], [6, 6], [7, 7],
-                [-1, 1], [-2, 2], [-3, 3], [-4, 4], [-5, 5], [-5, 5], [-6, 6], -[-7, 7],
-                [1, -1], [2, -2], [3, -3], [4, -4], [5, -5], [5, -5], [6, -6], [7, -7],
-                [-1, -1], [-2, -2], [-3, -3], [-4, -4], [-5, -5], [-5, -5], [-6, -6], -[-7, -7]]
+            case BB:
+            case BW:
+                possibleMoviments = createPossibleMoves(BW)
                 break;
-            case '♘':
-            case '♞':
+            case KB:
+            case KW:
                 possibleMoviments = [[2, 1], [2, -1], [1, 2], [-1, 2], [-2, 1], [22, 2], [-2, -1], [1, -2], [-1, -2], [27, 2]]  //row / column 
                 break;
-            case '♙':
-                possibleMoviments = [[1, 0], [2, 0]]
-                break;
-            case '♟':
-                possibleMoviments = [[-1, 0], [-2, 0]]
-                break;
+            case PW:
+                if (PieceSelected.row == 6) { possibleMoviments = [[1, 0], [2, 0]]; break; }
+                else { possibleMoviments = [[1, 0]]; break; }
+            case PB:
+                if (PieceSelected.row == 1) { possibleMoviments = [[-1, 0], [-2, 0]]; break; }
+                else { possibleMoviments = [[-1, 0]]; break; }
         }
         PieceSelected.possibleMoviments = possibleMoviments
         colorOnPossibleMoviments(possibleMoviments)
     }
 
     function colorOnPossibleMoviments(possibleMoviments, color = selectedSquareColor) {
-        console.log('colorOnPossibleMoviments()')
+        console.log(`colorOnPossibleMoviments()`, possibleMoviments)
         for (el of possibleMoviments) {
             try {
-                let squareInNotation = columns[PieceSelected.column - el[1]] + rows[PieceSelected.row - el[0]]
-                changeSquareColor(squareInNotation, color)
+                changeSquareColor(el, color)
             } catch (e) { }
         }
         refresh()
@@ -199,6 +193,43 @@ function Chess(boardClass) {
         let notation = columns[column] + rows[row]
         console.log(`isRed(${column}, ${row})`, notation)
         return HTMLboard.querySelector(`#${notation}`).style.backgroundColor == selectedSquareColor
+    }
+
+    function createPossibleMoves(typePiece) {
+        console.log('createPossibleMoves()', typePiece)
+        let possibleMoviments = []
+
+        if (typePiece == TW) {
+            for (let i = 1; i <= 8; i++) { // cima
+                try {
+                    possibleMoviments.push(columns[PieceSelected.column] + rows[PieceSelected.row - i + 1])
+                    if (whitePieces.includes(board[PieceSelected.row - i][PieceSelected.column])) break;
+                    if (blackPieces.includes(board[PieceSelected.row - i + 1][PieceSelected.column])) break;
+                } catch (e) { }
+            }
+            for (let i = 1; i <= 8; i++) { // baixo
+                try {
+                    possibleMoviments.push(columns[PieceSelected.column] + rows[PieceSelected.row - 1 + i])
+                    if (whitePieces.includes(board[PieceSelected.row + i][PieceSelected.column])) break;
+                    if (blackPieces.includes(board[PieceSelected.row + i - 1][PieceSelected.column])) break;
+                } catch (e) { }
+            }
+            for (let i = 1; i <= 8; i++) { // direita
+                try {
+                    possibleMoviments.push(columns[PieceSelected.column + i - 1] + rows[PieceSelected.row])
+                    if (whitePieces.includes(board[PieceSelected.row][PieceSelected.column + i])) break;
+                    if (blackPieces.includes(board[PieceSelected.row][PieceSelected.column + i - 1])) break;
+                } catch (e) { }
+            }
+            for (let i = 1; i <= 8; i++) { // esquerda
+                try {
+                    possibleMoviments.push(columns[PieceSelected.column - i + 1] + rows[PieceSelected.row])
+                    if (whitePieces.includes(board[PieceSelected.row][PieceSelected.column - i])) break;
+                    if (blackPieces.includes(board[PieceSelected.row][PieceSelected.column - i + 1])) break;
+                } catch (e) { }
+            }
+        }
+        return possibleMoviments
     }
 }
 
