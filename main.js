@@ -45,14 +45,14 @@ function Chess(boardClass) {
         column: ''
     }
 
-    board = [
-        [TB, 0, BB, QB, KB, BB, NB, 0],//8
-        [0, TB, PB, PB, PB, PB, PB, 0],//7
-        [0, 0, 0, PW, 0, 0, 0, 0],//6
-        [0, 0, PW, PB, TW, PW, PW, 0],//5
-        [0, 0, 0, 0, PW, PW, 0, 0],//4
-        [TW, TW, TW, TB, TB, TW, TW, 0],//3
-        [PW, PW, PW, PW, PW, PW, PW, 0],//2
+    let board = [
+        [0, 0, 0, 0, 0, 0, 0, 0],//8
+        [0, 0, PW, 0, 0, 0, PB, 0],//7
+        [0, 0, 0, 0, 0, 0, 0, 0],//6
+        [0, 0, 0, 0, BB, 0, 0, 0],//5
+        [0, 0, 0, 0, 0, 0, 0, 0],//4
+        [0, 0, 0, 0, 0, 0, 0, 0],//3
+        [PW, PW, PW, PW, PW, PW, PW, PW],//2
         [TB, NB, BB, QB, KW, BB, NB, TW]//1
     ]
 
@@ -138,43 +138,9 @@ function Chess(boardClass) {
 
     function pieceMoves() { // tenho que dividir essa função em duas futuramente
         let possibleMoviments = []
-        console.log(PieceSelected.piece == TW)
-        switch (PieceSelected.piece) {
-            case KB:
-            case KW:
-                possibleMoviments = [[1, 0], [0, 1], [1, 1], [-1, 0], [0, -1], [-1, -1], [1, -1], [-1, 1]]
-                break;
-            case QB:
-            case QW:
-                possibleMoviments = [[1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0], [7, 0],//tower moves
-                [-1, 0], [-2, 0], [-3, 0], [-4, 0], [-5, 0], [-6, 0], [-7, 0],
-                [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [0, 7],
-                [0, -1], [0, -2], [0, -3], [0, -4], [0, -5], [0, -6], [0, -7],
+        console.log(PieceSelected.piece == TB)
+        possibleMoviments = createPossibleMoves(PieceSelected.piece)
 
-                [1, 1], [2, 2], [3, 3], [4, 4], [5, 5], [5, 5], [6, 6], [7, 7], //bishop moves
-                [-1, 1], [-2, 2], [-3, 3], [-4, 4], [-5, 5], [-5, 5], [-6, 6], -[-7, 7],
-                [1, -1], [2, -2], [3, -3], [4, -4], [5, -5], [5, -5], [6, -6], [7, -7],
-                [-1, -1], [-2, -2], [-3, -3], [-4, -4], [-5, -5], [-5, -5], [-6, -6], -[-7, -7]]
-                break;
-            case TB:
-            case TW:
-                possibleMoviments = createPossibleMoves(TW)
-                break;
-            case BB:
-            case BW:
-                possibleMoviments = createPossibleMoves(BW)
-                break;
-            case KB:
-            case KW:
-                possibleMoviments = [[2, 1], [2, -1], [1, 2], [-1, 2], [-2, 1], [22, 2], [-2, -1], [1, -2], [-1, -2], [27, 2]]  //row / column 
-                break;
-            case PW:
-                if (PieceSelected.row == 6) { possibleMoviments = [[1, 0], [2, 0]]; break; }
-                else { possibleMoviments = [[1, 0]]; break; }
-            case PB:
-                if (PieceSelected.row == 1) { possibleMoviments = [[-1, 0], [-2, 0]]; break; }
-                else { possibleMoviments = [[-1, 0]]; break; }
-        }
         PieceSelected.possibleMoviments = possibleMoviments
         colorOnPossibleMoviments(possibleMoviments)
     }
@@ -226,6 +192,97 @@ function Chess(boardClass) {
                     possibleMoviments.push(columns[PieceSelected.column - i + 1] + rows[PieceSelected.row])
                     if (whitePieces.includes(board[PieceSelected.row][PieceSelected.column - i])) break;
                     if (blackPieces.includes(board[PieceSelected.row][PieceSelected.column - i + 1])) break;
+                } catch (e) { }
+            }
+        }
+
+        if (typePiece == TB) {
+            for (let i = 1; i <= 8; i++) { // cima
+                try {
+                    possibleMoviments.push(columns[PieceSelected.column] + rows[PieceSelected.row - i + 1])
+                    if (whitePieces.includes(board[PieceSelected.row - i + 1][PieceSelected.column])) break;
+                    if (blackPieces.includes(board[PieceSelected.row - i][PieceSelected.column])) break;
+                } catch (e) { }
+            }
+            for (let i = 1; i <= 8; i++) { // baixo
+                try {
+                    possibleMoviments.push(columns[PieceSelected.column] + rows[PieceSelected.row - 1 + i])
+                    if (whitePieces.includes(board[PieceSelected.row + i - 1][PieceSelected.column])) break;
+                    if (blackPieces.includes(board[PieceSelected.row + i][PieceSelected.column])) break;
+                } catch (e) { }
+            }
+            for (let i = 1; i <= 8; i++) { // direita
+                try {
+                    possibleMoviments.push(columns[PieceSelected.column + i - 1] + rows[PieceSelected.row])
+                    if (whitePieces.includes(board[PieceSelected.row][PieceSelected.column + i - 1])) break;
+                    if (blackPieces.includes(board[PieceSelected.row][PieceSelected.column + i])) break;
+                } catch (e) { }
+            }
+            for (let i = 1; i <= 8; i++) { // esquerda
+                try {
+                    possibleMoviments.push(columns[PieceSelected.column - i + 1] + rows[PieceSelected.row])
+                    if (whitePieces.includes(board[PieceSelected.row][PieceSelected.column - i + 1])) break;
+                    if (blackPieces.includes(board[PieceSelected.row][PieceSelected.column - i])) break;
+                } catch (e) { }
+            }
+        }
+        if (typePiece == BW) {
+            for (let i = 1; i <= 8; i++) {
+                try {
+                    possibleMoviments.push(columns[PieceSelected.column + i] + rows[PieceSelected.row - i])
+                    if (whitePieces.includes(board[PieceSelected.row - i - 1][PieceSelected.column + i + 1])) break;
+                    if (blackPieces.includes(board[PieceSelected.row - i][PieceSelected.column + i])) break;
+                } catch (e) { }
+            }
+            for (let i = 1; i <= 8; i++) {
+                try {
+                    possibleMoviments.push(columns[PieceSelected.column - i] + rows[PieceSelected.row - i])
+                    if (whitePieces.includes(board[PieceSelected.row - i - 1][PieceSelected.column - i - 1])) break;
+                    if (blackPieces.includes(board[PieceSelected.row - i][PieceSelected.column - i])) break;
+                } catch (e) { }
+            }
+            for (let i = 1; i <= 8; i++) {
+                try {
+                    possibleMoviments.push(columns[PieceSelected.column - i] + rows[PieceSelected.row + i])
+                    if (whitePieces.includes(board[PieceSelected.row + i + 1][PieceSelected.column - i - 1])) break;
+                    if (blackPieces.includes(board[PieceSelected.row + i][PieceSelected.column - i])) break;
+                } catch (e) { }
+            }
+            for (let i = 1; i <= 8; i++) {
+                try {
+                    possibleMoviments.push(columns[PieceSelected.column + i] + rows[PieceSelected.row + i])
+                    if (whitePieces.includes(board[PieceSelected.row + i + 1][PieceSelected.column + i + 1])) break;
+                    if (blackPieces.includes(board[PieceSelected.row + i][PieceSelected.column + i])) break;
+                } catch (e) { }
+            }
+        }
+        if (typePiece == BB) {
+            for (let i = 1; i <= 8; i++) {
+                try {
+                    possibleMoviments.push(columns[PieceSelected.column + i] + rows[PieceSelected.row - i])
+                    if (whitePieces.includes(board[PieceSelected.row - i ][PieceSelected.column + i ])) break;
+                    if (blackPieces.includes(board[PieceSelected.row - i - 1][PieceSelected.column + i + 1])) break;
+                } catch (e) { }
+            }
+            for (let i = 1; i <= 8; i++) {
+                try {
+                    possibleMoviments.push(columns[PieceSelected.column - i] + rows[PieceSelected.row - i])
+                    if (whitePieces.includes(board[PieceSelected.row - i ][PieceSelected.column - i])) break;
+                    if (blackPieces.includes(board[PieceSelected.row - i - 1][PieceSelected.column - i - 1])) break;
+                } catch (e) { }
+            }
+            for (let i = 1; i <= 8; i++) {
+                try {
+                    possibleMoviments.push(columns[PieceSelected.column - i] + rows[PieceSelected.row + i])
+                    if (whitePieces.includes(board[PieceSelected.row + i ][PieceSelected.column - i - 1])) break;
+                    if (blackPieces.includes(board[PieceSelected.row + i + 1][PieceSelected.column - i - 1])) break;
+                } catch (e) { }
+            }
+            for (let i = 1; i <= 8; i++) {
+                try {
+                    possibleMoviments.push(columns[PieceSelected.column + i] + rows[PieceSelected.row + i])
+                    if (whitePieces.includes(board[PieceSelected.row + i ][PieceSelected.column + i])) break;
+                    if (blackPieces.includes(board[PieceSelected.row + i + 1][PieceSelected.column + i + 1])) break;
                 } catch (e) { }
             }
         }
