@@ -46,14 +46,14 @@ function Chess(boardClass) {
     }
 
     let board = [
-        [0, 0, 0, 0, 0, 0, 0, 0],//8
-        [0, 0, PW, 0, 0, 0, PB, 0],//7
+        [TB, NB, BB, QB, KB, BB, NB, TW],//8
+        [PB, PB, 0, PB, PB, PB, PB, PB],//7
         [0, 0, 0, 0, 0, 0, 0, 0],//6
-        [0, 0, 0, 0, BB, 0, 0, 0],//5
-        [0, 0, 0, 0, 0, 0, 0, 0],//4
-        [0, 0, 0, 0, 0, 0, 0, 0],//3
-        [PW, PW, PW, PW, PW, PW, PW, PW],//2
-        [TB, NB, BB, QB, KW, BB, NB, TW]//1
+        [0, 0, 0, PW, BB, 0, 0, 0],//5
+        [0, 0, BW, 0, 0, 0, 0, 0],//4
+        [0, 0, 0, PB, 0, 0, 0, 0],//3
+        [PW, PW, PW, 0, 0, PW, PW, 0],//2
+        [TW, NW, BW, QW, KW, BW, NW, TW]//1
     ]
 
 
@@ -85,13 +85,12 @@ function Chess(boardClass) {
         document.addEventListener('click', (e) => {
             if (PieceSelected.have) return
             if (typeof e.target.innerText != 'string') return
-            console.log('takeFirstClick()')
+            console.log('takeFirstClick()', columns[PieceSelected.column] + rows[PieceSelected.row])
             try {
                 PieceSelected.column = columns.indexOf(e.target.id[0])
                 PieceSelected.row = rows.indexOf(Number(e.target.id[1]))
                 PieceSelected.square = e.target.id
                 PieceSelected.piece = e.target.innerText
-                console.log(columns[PieceSelected.column] + rows[PieceSelected.row])
 
                 if (PieceSelected.piece == 0) return
                 PieceSelected.have = true
@@ -138,7 +137,6 @@ function Chess(boardClass) {
 
     function pieceMoves() { // tenho que dividir essa função em duas futuramente
         let possibleMoviments = []
-        console.log(PieceSelected.piece == TB)
         possibleMoviments = createPossibleMoves(PieceSelected.piece)
 
         PieceSelected.possibleMoviments = possibleMoviments
@@ -146,7 +144,8 @@ function Chess(boardClass) {
     }
 
     function colorOnPossibleMoviments(possibleMoviments, color = selectedSquareColor) {
-        console.log(`colorOnPossibleMoviments()`, possibleMoviments)
+        console.log(`colorOnPossibleMoviments()`)
+        console.log(possibleMoviments)
         for (el of possibleMoviments) {
             try {
                 changeSquareColor(el, color)
@@ -230,29 +229,29 @@ function Chess(boardClass) {
             for (let i = 1; i <= 8; i++) {
                 try {
                     possibleMoviments.push(columns[PieceSelected.column + i] + rows[PieceSelected.row - i])
-                    if (whitePieces.includes(board[PieceSelected.row - i - 1][PieceSelected.column + i + 1])) break;
+                    if (whitePieces.includes(board[PieceSelected.row - i][PieceSelected.column + i ])) {possibleMoviments.pop(); break;}
                     if (blackPieces.includes(board[PieceSelected.row - i][PieceSelected.column + i])) break;
                 } catch (e) { }
             }
             for (let i = 1; i <= 8; i++) {
                 try {
+                    possibleMoviments.push(columns[PieceSelected.column + i] + rows[PieceSelected.row + i])
+                    if (whitePieces.includes(board[PieceSelected.row + i][PieceSelected.column + i ])) {possibleMoviments.pop(); break;}
+                    if (blackPieces.includes(board[PieceSelected.row + i][PieceSelected.column + i])) break;
+                } catch (e) { }
+            }
+            for (let i = 1; i <= 8; i++) {
+                try {
                     possibleMoviments.push(columns[PieceSelected.column - i] + rows[PieceSelected.row - i])
-                    if (whitePieces.includes(board[PieceSelected.row - i - 1][PieceSelected.column - i - 1])) break;
+                    if (whitePieces.includes(board[PieceSelected.row - i][PieceSelected.column - i ])) {possibleMoviments.pop(); break;}
                     if (blackPieces.includes(board[PieceSelected.row - i][PieceSelected.column - i])) break;
                 } catch (e) { }
             }
             for (let i = 1; i <= 8; i++) {
                 try {
                     possibleMoviments.push(columns[PieceSelected.column - i] + rows[PieceSelected.row + i])
-                    if (whitePieces.includes(board[PieceSelected.row + i + 1][PieceSelected.column - i - 1])) break;
+                    if (whitePieces.includes(board[PieceSelected.row + i][PieceSelected.column - i ])) {possibleMoviments.pop(); break;}
                     if (blackPieces.includes(board[PieceSelected.row + i][PieceSelected.column - i])) break;
-                } catch (e) { }
-            }
-            for (let i = 1; i <= 8; i++) {
-                try {
-                    possibleMoviments.push(columns[PieceSelected.column + i] + rows[PieceSelected.row + i])
-                    if (whitePieces.includes(board[PieceSelected.row + i + 1][PieceSelected.column + i + 1])) break;
-                    if (blackPieces.includes(board[PieceSelected.row + i][PieceSelected.column + i])) break;
                 } catch (e) { }
             }
         }
@@ -260,31 +259,37 @@ function Chess(boardClass) {
             for (let i = 1; i <= 8; i++) {
                 try {
                     possibleMoviments.push(columns[PieceSelected.column + i] + rows[PieceSelected.row - i])
-                    if (whitePieces.includes(board[PieceSelected.row - i ][PieceSelected.column + i ])) break;
-                    if (blackPieces.includes(board[PieceSelected.row - i - 1][PieceSelected.column + i + 1])) break;
-                } catch (e) { }
-            }
-            for (let i = 1; i <= 8; i++) {
-                try {
-                    possibleMoviments.push(columns[PieceSelected.column - i] + rows[PieceSelected.row - i])
-                    if (whitePieces.includes(board[PieceSelected.row - i ][PieceSelected.column - i])) break;
-                    if (blackPieces.includes(board[PieceSelected.row - i - 1][PieceSelected.column - i - 1])) break;
-                } catch (e) { }
-            }
-            for (let i = 1; i <= 8; i++) {
-                try {
-                    possibleMoviments.push(columns[PieceSelected.column - i] + rows[PieceSelected.row + i])
-                    if (whitePieces.includes(board[PieceSelected.row + i ][PieceSelected.column - i - 1])) break;
-                    if (blackPieces.includes(board[PieceSelected.row + i + 1][PieceSelected.column - i - 1])) break;
+                    if (whitePieces.includes(board[PieceSelected.row - i][PieceSelected.column + i ])) break;
+                    if (blackPieces.includes(board[PieceSelected.row - i][PieceSelected.column + i])) {possibleMoviments.pop(); break;}
                 } catch (e) { }
             }
             for (let i = 1; i <= 8; i++) {
                 try {
                     possibleMoviments.push(columns[PieceSelected.column + i] + rows[PieceSelected.row + i])
-                    if (whitePieces.includes(board[PieceSelected.row + i ][PieceSelected.column + i])) break;
-                    if (blackPieces.includes(board[PieceSelected.row + i + 1][PieceSelected.column + i + 1])) break;
+                    if (whitePieces.includes(board[PieceSelected.row + i][PieceSelected.column + i ])) break;
+                    if (blackPieces.includes(board[PieceSelected.row + i][PieceSelected.column + i])) {possibleMoviments.pop(); break;}
                 } catch (e) { }
             }
+            for (let i = 1; i <= 8; i++) {
+                try {
+                    possibleMoviments.push(columns[PieceSelected.column - i] + rows[PieceSelected.row - i])
+                    if (whitePieces.includes(board[PieceSelected.row - i][PieceSelected.column - i ])) break;
+                    if (blackPieces.includes(board[PieceSelected.row - i][PieceSelected.column - i])) {possibleMoviments.pop(); break;}
+                } catch (e) { }
+            }
+            for (let i = 1; i <= 8; i++) {
+                try {
+                    possibleMoviments.push(columns[PieceSelected.column - i] + rows[PieceSelected.row + i])
+                    if (whitePieces.includes(board[PieceSelected.row + i][PieceSelected.column - i ])) break;
+                    if (blackPieces.includes(board[PieceSelected.row + i][PieceSelected.column - i])) {possibleMoviments.pop(); break;}
+                } catch (e) { }
+            }
+        }
+        if (typePiece == QW) {
+            possibleMoviments = createPossibleMoves(TW).concat(createPossibleMoves(BW))
+        }
+        if (typePiece == QB) {
+            possibleMoviments = createPossibleMoves(TB).concat(createPossibleMoves(BB))
         }
         return possibleMoviments
     }
