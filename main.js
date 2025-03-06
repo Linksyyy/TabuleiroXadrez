@@ -50,7 +50,7 @@ function Chess(boardClass) {
         [PB, PB, PB, PB, PB, PB, PB, PB],//7
         [0, 0, 0, 0, 0, 0, 0, 0],//6
         [0, 0, 0, 0, 0, 0, 0, 0],//5
-        [0, 0, 0, NW, 0, NB, 0, 0],//4
+        [0, 0, 0, 0, 0, 0, 0, 0],//4
         [0, 0, 0, 0, 0, 0, 0, 0],//3
         [PW, PW, PW, PW, PW, PW, PW, PW],//2
         [TW, NW, BW, QW, KW, BW, NW, TW]//1
@@ -390,11 +390,11 @@ function Chess(boardClass) {
                     possibleMoviments.push(columns[PieceSelected.column + 1] + rows[PieceSelected.row + 2])
             } catch (e) { }
             try {
-                if (!blackPieceswhitePieces.includes(board[PieceSelected.row + 2][PieceSelected.column - 1]))
+                if (!blackPieces.includes(board[PieceSelected.row + 2][PieceSelected.column - 1]))
                     possibleMoviments.push(columns[PieceSelected.column - 1] + rows[PieceSelected.row + 2])
             } catch (e) { }
             try {
-                if (!blackPieceswhitePieces.includes(board[PieceSelected.row + 1][PieceSelected.column - 2]))
+                if (!blackPieces.includes(board[PieceSelected.row + 1][PieceSelected.column - 2]))
                     possibleMoviments.push(columns[PieceSelected.column - 2] + rows[PieceSelected.row + 1])
             } catch (e) { }
             try {
