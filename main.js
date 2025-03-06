@@ -309,12 +309,12 @@ function Chess(boardClass) {
                 }
             } catch (e) { }
             try {
-                if (board[PieceSelected.row + 1][PieceSelected.column + 1]) {
+                if (whitePieces.includes(board[PieceSelected.row + 1][PieceSelected.column + 1])) {
                     possibleMoviments.push(columns[PieceSelected.column + 1] + rows[PieceSelected.row + 1])
                 }
             } catch (e) { }
             try {
-                if (board[PieceSelected.row + 1][PieceSelected.column - 1] != 0) {
+                if (whitePieces.includes(board[PieceSelected.row + 1][PieceSelected.column - 1])) {
                     possibleMoviments.push(columns[PieceSelected.column - 1] + rows[PieceSelected.row + 1])
                 }
             } catch (e) { }
@@ -332,12 +332,12 @@ function Chess(boardClass) {
                 }
             } catch (e) { }
             try {
-                if (board[PieceSelected.row - 1][PieceSelected.column - 1]) {
+                if (blackPieces.includes(board[PieceSelected.row - 1][PieceSelected.column - 1])) {
                     possibleMoviments.push(columns[PieceSelected.column - 1] + rows[PieceSelected.row - 1])
                 }
             } catch (e) { }
             try {
-                if (board[PieceSelected.row - 1][PieceSelected.column + 1] != 0) {
+                if (blackPieces,includes(board[PieceSelected.row - 1][PieceSelected.column + 1] != 0)) {
                     possibleMoviments.push(columns[PieceSelected.column + 1] + rows[PieceSelected.row - 1])
                 }
             } catch (e) { }
@@ -348,4 +348,4 @@ function Chess(boardClass) {
 }
 
 const Xadrez = new Chess('.board')
-Xadrez.execute()                
+Xadrez.execute()
