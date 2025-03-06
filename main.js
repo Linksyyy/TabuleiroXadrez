@@ -410,6 +410,41 @@ function Chess(boardClass) {
                     possibleMoviments.push(columns[PieceSelected.column - 1] + rows[PieceSelected.row - 2])
             } catch (e) { }
         }
+        if (typePiece == KW) {
+            try {
+                if (!whitePieces.includes(board[PieceSelected.row - 1][PieceSelected.column]))
+                    possibleMoviments.push(columns[PieceSelected.column] + rows[PieceSelected.row - 1])
+            } catch (e) { }
+            try {
+                if (!whitePieces.includes(board[PieceSelected.row + 1][PieceSelected.column]))
+                    possibleMoviments.push(columns[PieceSelected.column] + rows[PieceSelected.row + 1])
+            } catch (e) { }
+            try {
+                if (!whitePieces.includes(board[PieceSelected.row][PieceSelected.column - 1]))
+                    possibleMoviments.push(columns[PieceSelected.column - 1] + rows[PieceSelected.row])
+            } catch (e) { }
+            try {
+                if (!whitePieces.includes(board[PieceSelected.row][PieceSelected.column + 1]))
+                    possibleMoviments.push(columns[PieceSelected.column + 1] + rows[PieceSelected.row])
+            } catch (e) { }
+
+            try {
+                if (!whitePieces.includes(board[PieceSelected.row - 1][PieceSelected.column - 1]))
+                    possibleMoviments.push(columns[PieceSelected.column - 1] + rows[PieceSelected.row - 1])
+            } catch (e) { }
+            try {
+                if (!whitePieces.includes(board[PieceSelected.row + 1][PieceSelected.column + 1]))
+                    possibleMoviments.push(columns[PieceSelected.column + 1] + rows[PieceSelected.row + 1])
+            } catch (e) { }
+            try {
+                if (!whitePieces.includes(board[PieceSelected.row + 1][PieceSelected.column - 1]))
+                    possibleMoviments.push(columns[PieceSelected.column - 1] + rows[PieceSelected.row + 1])
+            } catch (e) { }
+            try {
+                if (!whitePieces.includes(board[PieceSelected.row - 1][PieceSelected.column + 1]))
+                    possibleMoviments.push(columns[PieceSelected.column + 1] + rows[PieceSelected.row - 1])
+            } catch (e) { }
+        }
         console.log(possibleMoviments)
         return possibleMoviments
     }
