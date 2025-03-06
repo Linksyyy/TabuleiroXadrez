@@ -337,7 +337,7 @@ function Chess(boardClass) {
                 }
             } catch (e) { }
             try {
-                if (blackPieces,includes(board[PieceSelected.row - 1][PieceSelected.column + 1] != 0)) {
+                if (blackPieces.includes(board[PieceSelected.row - 1][PieceSelected.column + 1])) {
                     possibleMoviments.push(columns[PieceSelected.column + 1] + rows[PieceSelected.row - 1])
                 }
             } catch (e) { }
