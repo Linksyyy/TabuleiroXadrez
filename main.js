@@ -50,7 +50,7 @@ function Chess(boardClass) {
         [PB, PB, PB, PB, PB, PB, PB, PB],//7
         [0, 0, 0, 0, 0, 0, 0, 0],//6
         [0, 0, 0, 0, 0, 0, 0, 0],//5
-        [0, 0, 0, 0, 0, 0, 0, 0],//4
+        [0, 0, 0, NW, 0, NB, 0, 0],//4
         [0, 0, 0, 0, 0, 0, 0, 0],//3
         [PW, PW, PW, PW, PW, PW, PW, PW],//2
         [TW, NW, BW, QW, KW, BW, NW, TW]//1
@@ -296,6 +296,29 @@ function Chess(boardClass) {
         if (typePiece == QB) {
             possibleMoviments = createPossibleMoves(TB).concat(createPossibleMoves(BB))
         }
+        if (typePiece == PW) {
+            try {
+                if (PieceSelected.row == 6 & board[PieceSelected.row - 2][PieceSelected.column] == 0) {
+                    possibleMoviments.push(columns[PieceSelected.column] + rows[PieceSelected.row - 1])
+                    possibleMoviments.push(columns[PieceSelected.column] + rows[PieceSelected.row - 2])
+                }
+            } catch (e) { }
+            try {
+                if (board[PieceSelected.row - 1][PieceSelected.column] == 0) {
+                    possibleMoviments.push(columns[PieceSelected.column] + rows[PieceSelected.row - 1])
+                }
+            } catch (e) { }
+            try {
+                if (blackPieces.includes(board[PieceSelected.row - 1][PieceSelected.column - 1])) {
+                    possibleMoviments.push(columns[PieceSelected.column - 1] + rows[PieceSelected.row - 1])
+                }
+            } catch (e) { }
+            try {
+                if (blackPieces.includes(board[PieceSelected.row - 1][PieceSelected.column + 1])) {
+                    possibleMoviments.push(columns[PieceSelected.column + 1] + rows[PieceSelected.row - 1])
+                }
+            } catch (e) { }
+        }
         if (typePiece == PB) {
             try {
                 if (PieceSelected.row == 1 & board[PieceSelected.row + 2][PieceSelected.column] == 0) {
@@ -319,27 +342,72 @@ function Chess(boardClass) {
                 }
             } catch (e) { }
         }
-        if (typePiece == PW) {
+        if (typePiece == NW) {
             try {
-                if (PieceSelected.row == 6 & board[PieceSelected.row - 2][PieceSelected.column] == 0) {
-                    possibleMoviments.push(columns[PieceSelected.column] + rows[PieceSelected.row - 1])
-                    possibleMoviments.push(columns[PieceSelected.column] + rows[PieceSelected.row - 2])
-                }
+                if (!whitePieces.includes(board[PieceSelected.row + 1][PieceSelected.column + 2]))
+                    possibleMoviments.push(columns[PieceSelected.column + 2] + rows[PieceSelected.row + 1])
             } catch (e) { }
             try {
-                if (board[PieceSelected.row - 1][PieceSelected.column] == 0) {
-                    possibleMoviments.push(columns[PieceSelected.column] + rows[PieceSelected.row - 1])
-                }
+                if (!whitePieces.includes(board[PieceSelected.row - 1][PieceSelected.column + 2]))
+                    possibleMoviments.push(columns[PieceSelected.column + 2] + rows[PieceSelected.row - 1])
             } catch (e) { }
             try {
-                if (blackPieces.includes(board[PieceSelected.row - 1][PieceSelected.column - 1])) {
-                    possibleMoviments.push(columns[PieceSelected.column - 1] + rows[PieceSelected.row - 1])
-                }
+                if (!whitePieces.includes(board[PieceSelected.row + 2][PieceSelected.column + 1]))
+                    possibleMoviments.push(columns[PieceSelected.column + 1] + rows[PieceSelected.row + 2])
             } catch (e) { }
             try {
-                if (blackPieces.includes(board[PieceSelected.row - 1][PieceSelected.column + 1])) {
-                    possibleMoviments.push(columns[PieceSelected.column + 1] + rows[PieceSelected.row - 1])
-                }
+                if (!whitePieces.includes(board[PieceSelected.row + 2][PieceSelected.column - 1]))
+                    possibleMoviments.push(columns[PieceSelected.column - 1] + rows[PieceSelected.row + 2])
+            } catch (e) { }
+            try {
+                if (!whitePieces.includes(board[PieceSelected.row + 1][PieceSelected.column - 2]))
+                    possibleMoviments.push(columns[PieceSelected.column - 2] + rows[PieceSelected.row + 1])
+            } catch (e) { }
+            try {
+                if (!whitePieces.includes(board[PieceSelected.row - 1][PieceSelected.column - 2]))
+                    possibleMoviments.push(columns[PieceSelected.column - 2] + rows[PieceSelected.row - 1])
+            } catch (e) { }
+            try {
+                if (!whitePieces.includes(board[PieceSelected.row - 2][PieceSelected.column + 1]))
+                    possibleMoviments.push(columns[PieceSelected.column + 1] + rows[PieceSelected.row - 2])
+            } catch (e) { }
+            try {
+                if (!whitePieces.includes(board[PieceSelected.row - 2][PieceSelected.column - 1]))
+                    possibleMoviments.push(columns[PieceSelected.column - 1] + rows[PieceSelected.row - 2])
+            } catch (e) { }
+        }
+        if (typePiece == NB) {
+            try {
+                if (!blackPieces.includes(board[PieceSelected.row + 1][PieceSelected.column + 2]))
+                    possibleMoviments.push(columns[PieceSelected.column + 2] + rows[PieceSelected.row + 1])
+            } catch (e) { }
+            try {
+                if (!blackPieces.includes(board[PieceSelected.row - 1][PieceSelected.column + 2]))
+                    possibleMoviments.push(columns[PieceSelected.column + 2] + rows[PieceSelected.row - 1])
+            } catch (e) { }
+            try {
+                if (!blackPieces.includes(board[PieceSelected.row + 2][PieceSelected.column + 1]))
+                    possibleMoviments.push(columns[PieceSelected.column + 1] + rows[PieceSelected.row + 2])
+            } catch (e) { }
+            try {
+                if (!blackPieceswhitePieces.includes(board[PieceSelected.row + 2][PieceSelected.column - 1]))
+                    possibleMoviments.push(columns[PieceSelected.column - 1] + rows[PieceSelected.row + 2])
+            } catch (e) { }
+            try {
+                if (!blackPieceswhitePieces.includes(board[PieceSelected.row + 1][PieceSelected.column - 2]))
+                    possibleMoviments.push(columns[PieceSelected.column - 2] + rows[PieceSelected.row + 1])
+            } catch (e) { }
+            try {
+                if (!blackPieces.includes(board[PieceSelected.row - 1][PieceSelected.column - 2]))
+                    possibleMoviments.push(columns[PieceSelected.column - 2] + rows[PieceSelected.row - 1])
+            } catch (e) { }
+            try {
+                if (!blackPieces.includes(board[PieceSelected.row - 2][PieceSelected.column + 1]))
+                    possibleMoviments.push(columns[PieceSelected.column + 1] + rows[PieceSelected.row - 2])
+            } catch (e) { }
+            try {
+                if (!blackPieces.includes(board[PieceSelected.row - 2][PieceSelected.column - 1]))
+                    possibleMoviments.push(columns[PieceSelected.column - 1] + rows[PieceSelected.row - 2])
             } catch (e) { }
         }
         console.log(possibleMoviments)
