@@ -46,13 +46,13 @@ function Chess(boardClass) {
     }
 
     let board = [
-        [TB, NB, BB, QB, KB, BB, NB, TW],//8
-        [PB, PB, 0, PB, PB, PB, PB, PB],//7
+        [TB, NB, BB, QB, KB, BB, NB, TB],//8
+        [PB, PB, PB, PB, PB, PB, PB, PB],//7
         [0, 0, 0, 0, 0, 0, 0, 0],//6
-        [0, 0, 0, PW, BB, 0, 0, 0],//5
-        [0, 0, BW, 0, 0, 0, 0, 0],//4
-        [0, 0, 0, PB, 0, 0, 0, 0],//3
-        [PW, PW, PW, 0, 0, PW, PW, 0],//2
+        [0, 0, 0, 0, 0, 0, 0, 0],//5
+        [0, 0, 0, 0, 0, 0, 0, 0],//4
+        [0, 0, 0, 0, 0, 0, 0, 0],//3
+        [PW, PW, PW, PW, PW, PW, PW, PW],//2
         [TW, NW, BW, QW, KW, BW, NW, TW]//1
     ]
 
@@ -124,6 +124,12 @@ function Chess(boardClass) {
 
     function movePiece() {
         console.log('movePiece()')
+        if (pieceMoves == PW & secondSquareSelected.row == 0) {
+            board[secondSquareSelected.row][secondSquareSelected.column] = QW
+        }
+        if (pieceMoves == PB & secondSquareSelected.row == 7) {
+            board[secondSquareSelected.row][secondSquareSelected.column] = QB
+        }
         board[secondSquareSelected.row][secondSquareSelected.column] = PieceSelected.piece
         board[PieceSelected.row][PieceSelected.column] = '0'
     }
@@ -165,7 +171,7 @@ function Chess(boardClass) {
         let possibleMoviments = []
 
         if (typePiece == TW) {
-            for (let i = 1; i <= 8; i++) { // cima
+            for (let i = 1; i <= 7; i++) { // cima
                 try {
                     possibleMoviments.push(columns[PieceSelected.column] + rows[PieceSelected.row - i + 1])
                     if (whitePieces.includes(board[PieceSelected.row - i][PieceSelected.column])) break;
@@ -194,7 +200,6 @@ function Chess(boardClass) {
                 } catch (e) { }
             }
         }
-
         if (typePiece == TB) {
             for (let i = 1; i <= 8; i++) { // cima
                 try {
@@ -229,28 +234,28 @@ function Chess(boardClass) {
             for (let i = 1; i <= 8; i++) {
                 try {
                     possibleMoviments.push(columns[PieceSelected.column + i] + rows[PieceSelected.row - i])
-                    if (whitePieces.includes(board[PieceSelected.row - i][PieceSelected.column + i ])) {possibleMoviments.pop(); break;}
+                    if (whitePieces.includes(board[PieceSelected.row - i][PieceSelected.column + i])) { possibleMoviments.pop(); break; }
                     if (blackPieces.includes(board[PieceSelected.row - i][PieceSelected.column + i])) break;
                 } catch (e) { }
             }
             for (let i = 1; i <= 8; i++) {
                 try {
                     possibleMoviments.push(columns[PieceSelected.column + i] + rows[PieceSelected.row + i])
-                    if (whitePieces.includes(board[PieceSelected.row + i][PieceSelected.column + i ])) {possibleMoviments.pop(); break;}
+                    if (whitePieces.includes(board[PieceSelected.row + i][PieceSelected.column + i])) { possibleMoviments.pop(); break; }
                     if (blackPieces.includes(board[PieceSelected.row + i][PieceSelected.column + i])) break;
                 } catch (e) { }
             }
             for (let i = 1; i <= 8; i++) {
                 try {
                     possibleMoviments.push(columns[PieceSelected.column - i] + rows[PieceSelected.row - i])
-                    if (whitePieces.includes(board[PieceSelected.row - i][PieceSelected.column - i ])) {possibleMoviments.pop(); break;}
+                    if (whitePieces.includes(board[PieceSelected.row - i][PieceSelected.column - i])) { possibleMoviments.pop(); break; }
                     if (blackPieces.includes(board[PieceSelected.row - i][PieceSelected.column - i])) break;
                 } catch (e) { }
             }
             for (let i = 1; i <= 8; i++) {
                 try {
                     possibleMoviments.push(columns[PieceSelected.column - i] + rows[PieceSelected.row + i])
-                    if (whitePieces.includes(board[PieceSelected.row + i][PieceSelected.column - i ])) {possibleMoviments.pop(); break;}
+                    if (whitePieces.includes(board[PieceSelected.row + i][PieceSelected.column - i])) { possibleMoviments.pop(); break; }
                     if (blackPieces.includes(board[PieceSelected.row + i][PieceSelected.column - i])) break;
                 } catch (e) { }
             }
@@ -259,29 +264,29 @@ function Chess(boardClass) {
             for (let i = 1; i <= 8; i++) {
                 try {
                     possibleMoviments.push(columns[PieceSelected.column + i] + rows[PieceSelected.row - i])
-                    if (whitePieces.includes(board[PieceSelected.row - i][PieceSelected.column + i ])) break;
-                    if (blackPieces.includes(board[PieceSelected.row - i][PieceSelected.column + i])) {possibleMoviments.pop(); break;}
+                    if (whitePieces.includes(board[PieceSelected.row - i][PieceSelected.column + i])) break;
+                    if (blackPieces.includes(board[PieceSelected.row - i][PieceSelected.column + i])) { possibleMoviments.pop(); break; }
                 } catch (e) { }
             }
             for (let i = 1; i <= 8; i++) {
                 try {
                     possibleMoviments.push(columns[PieceSelected.column + i] + rows[PieceSelected.row + i])
-                    if (whitePieces.includes(board[PieceSelected.row + i][PieceSelected.column + i ])) break;
-                    if (blackPieces.includes(board[PieceSelected.row + i][PieceSelected.column + i])) {possibleMoviments.pop(); break;}
+                    if (whitePieces.includes(board[PieceSelected.row + i][PieceSelected.column + i])) break;
+                    if (blackPieces.includes(board[PieceSelected.row + i][PieceSelected.column + i])) { possibleMoviments.pop(); break; }
                 } catch (e) { }
             }
             for (let i = 1; i <= 8; i++) {
                 try {
                     possibleMoviments.push(columns[PieceSelected.column - i] + rows[PieceSelected.row - i])
-                    if (whitePieces.includes(board[PieceSelected.row - i][PieceSelected.column - i ])) break;
-                    if (blackPieces.includes(board[PieceSelected.row - i][PieceSelected.column - i])) {possibleMoviments.pop(); break;}
+                    if (whitePieces.includes(board[PieceSelected.row - i][PieceSelected.column - i])) break;
+                    if (blackPieces.includes(board[PieceSelected.row - i][PieceSelected.column - i])) { possibleMoviments.pop(); break; }
                 } catch (e) { }
             }
             for (let i = 1; i <= 8; i++) {
                 try {
                     possibleMoviments.push(columns[PieceSelected.column - i] + rows[PieceSelected.row + i])
-                    if (whitePieces.includes(board[PieceSelected.row + i][PieceSelected.column - i ])) break;
-                    if (blackPieces.includes(board[PieceSelected.row + i][PieceSelected.column - i])) {possibleMoviments.pop(); break;}
+                    if (whitePieces.includes(board[PieceSelected.row + i][PieceSelected.column - i])) break;
+                    if (blackPieces.includes(board[PieceSelected.row + i][PieceSelected.column - i])) { possibleMoviments.pop(); break; }
                 } catch (e) { }
             }
         }
@@ -291,6 +296,53 @@ function Chess(boardClass) {
         if (typePiece == QB) {
             possibleMoviments = createPossibleMoves(TB).concat(createPossibleMoves(BB))
         }
+        if (typePiece == PB) {
+            try {
+                if (PieceSelected.row == 1 & board[PieceSelected.row + 2][PieceSelected.column] == 0) {
+                    possibleMoviments.push(columns[PieceSelected.column] + rows[PieceSelected.row + 1])
+                    possibleMoviments.push(columns[PieceSelected.column] + rows[PieceSelected.row + 2])
+                }
+            } catch (e) { }
+            try {
+                if (board[PieceSelected.row + 1][PieceSelected.column] == 0) {
+                    possibleMoviments.push(columns[PieceSelected.column] + rows[PieceSelected.row + 1])
+                }
+            } catch (e) { }
+            try {
+                if (board[PieceSelected.row + 1][PieceSelected.column + 1]) {
+                    possibleMoviments.push(columns[PieceSelected.column + 1] + rows[PieceSelected.row + 1])
+                }
+            } catch (e) { }
+            try {
+                if (board[PieceSelected.row + 1][PieceSelected.column - 1] != 0) {
+                    possibleMoviments.push(columns[PieceSelected.column - 1] + rows[PieceSelected.row + 1])
+                }
+            } catch (e) { }
+        }
+        if (typePiece == PW) {
+            try {
+                if (PieceSelected.row == 6 & board[PieceSelected.row - 2][PieceSelected.column] == 0) {
+                    possibleMoviments.push(columns[PieceSelected.column] + rows[PieceSelected.row - 1])
+                    possibleMoviments.push(columns[PieceSelected.column] + rows[PieceSelected.row - 2])
+                }
+            } catch (e) { }
+            try {
+                if (board[PieceSelected.row - 1][PieceSelected.column] == 0) {
+                    possibleMoviments.push(columns[PieceSelected.column] + rows[PieceSelected.row - 1])
+                }
+            } catch (e) { }
+            try {
+                if (board[PieceSelected.row - 1][PieceSelected.column - 1]) {
+                    possibleMoviments.push(columns[PieceSelected.column - 1] + rows[PieceSelected.row - 1])
+                }
+            } catch (e) { }
+            try {
+                if (board[PieceSelected.row - 1][PieceSelected.column + 1] != 0) {
+                    possibleMoviments.push(columns[PieceSelected.column + 1] + rows[PieceSelected.row - 1])
+                }
+            } catch (e) { }
+        }
+        console.log(possibleMoviments)
         return possibleMoviments
     }
 }
